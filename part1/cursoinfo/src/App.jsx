@@ -1,77 +1,74 @@
-
-// Muestra el nombre del curso.
+// Definición del componente Header
 const Header = (props) => {
   return (
-    <h1>{props.course}</h1>
+    <h1>{props.course.name}</h1>
   )
 }
 
-
-// Recibe una parte y el número de ejercicios de forma individual.
+// Componente Part (Parte)
 const Part = (props) => {
   return (
     <p>
-      {props.part} {props.exercises}
+      {props.part.name} {props.part.exercises}
     </p>
   )
 }
 
-
-// Muestra todas las partes del curso (utiliza tres componentes Part).
-// Content solo se encarga de organizar los Part, delegando la presentación.
+// Definición del componente Content
 const Content = (props) => {
   return (
     <div>
-
-      <Part part={props.part1} exercises={props.exercises1} />
-      <Part part={props.part2} exercises={props.exercises2} />
-      <Part part={props.part3} exercises={props.exercises3} />
+      <Part part={props.parts[0]} />
+      <Part part={props.parts[1]} />
+      <Part part={props.parts[2]} />
     </div>
   )
 }
 
-
-// Muestra el número total de ejercicios.
+// Definición del componente Total
 const Total = (props) => {
+  // NOTA: Esta función DEBE tener su return dentro del cuerpo.
   return (
     <p>Number of exercises {props.total}</p>
   )
 }
 
 // Componente principal de la aplicación (App)
-// Contiene todos los datos y pasa los datos a los componentes hijos mediante props.
-const App = () => {
-  // 1. Datos del curso
-  const course = 'Half Stack application development'
-  const part1 = 'Fundamentals of React'
-  const exercises1 = 10
-  const part2 = 'Using props to pass data'
-  const exercises2 = 7
-  const part3 = 'State of a component'
-  const exercises3 = 14
+const App = () => { // <--- Inicio de la función App
+  // 1. Objeto central de datos (Requisito 1.5)
+  const course = {
+    name: 'Half Stack application development',
+    parts: [
+      {
+        name: 'Fundamentals of React',
+        exercises: 10
+      },
+      {
+        name: 'Using props to pass data',
+        exercises: 7
+      },
+      {
+        name: 'State of a component',
+        exercises: 14
+      }
+    ]
+  }
 
   // 2. Cálculo del total
-  const totalExercises = exercises1 + exercises2 + exercises3;
+  const totalExercises = course.parts[0].exercises + course.parts[1].exercises + course.parts[2].exercises;
 
-  return (
+  return ( // <--- Inicio del return DENTRO de la función App
     <div>
-      {/* Componente Header */}
+      {/* Componente Header: Pasamos el objeto 'course' completo */}
       <Header course={course} />
 
-      {/* Componente Content */}
-      <Content
-        part1={part1}
-        exercises1={exercises1}
-        part2={part2}
-        exercises2={exercises2}
-        part3={part3}
-        exercises3={exercises3}
-      />
+      {/* Componente Content: Pasamos solo el array de 'parts' */}
+      <Content parts={course.parts} />
 
       {/* Componente Total */}
       <Total total={totalExercises} />
     </div>
   )
-}
+} // <--- Final de la función App
 
 export default App
