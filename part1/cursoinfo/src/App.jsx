@@ -1,74 +1,109 @@
-// Definición del componente Header
-const Header = (props) => {
+// Componente Header
+const Header = ({ course }) => {
   return (
-    <h1>{props.course.name}</h1>
+    <h2>{course.name}</h2>
   )
 }
 
-// Componente Part (Parte)
-const Part = (props) => {
+// Componente Part
+const Part = ({ part }) => {
   return (
+    // Componente limpio, solo muestra texto y número
     <p>
-      {props.part.name} {props.part.exercises}
+      {part.name} {part.exercises}
     </p>
   )
 }
 
-// Definición del componente Content
-const Content = (props) => {
+// Componente Content (Usa map() - Ejercicio 2.1)
+const Content = ({ parts }) => {
   return (
     <div>
-      <Part part={props.parts[0]} />
-      <Part part={props.parts[1]} />
-      <Part part={props.parts[2]} />
+      {/* Mapea dinámicamente el array de partes */}
+      {parts.map(part =>
+        <Part key={part.id} part={part} />
+      )}
     </div>
   )
 }
 
-// Definición del componente Total
-const Total = (props) => {
-  // NOTA: Esta función DEBE tener su return dentro del cuerpo.
+// Componente Total (Corregido para mostrar el total)
+const Total = ({ parts }) => {
+  // Cálculo usando reduce() para sumar el total de ejercicios
+  const total = parts.reduce((sum, part) => sum + part.exercises, 0)
+
   return (
-    <p>Number of exercises {props.total}</p>
+    <p style={{ fontWeight: 'bold' }}>
+      Number of exercises {total}
+    </p>
   )
 }
 
-// Componente principal de la aplicación (App)
-const App = () => { // <--- Inicio de la función App
-  // 1. Objeto central de datos (Requisito 1.5)
-  const course = {
-    name: 'Half Stack application development',
-    parts: [
-      {
-        name: 'Fundamentals of React',
-        exercises: 10
-      },
-      {
-        name: 'Using props to pass data',
-        exercises: 7
-      },
-      {
-        name: 'State of a component',
-        exercises: 14
-      }
-    ]
-  }
-
-  // 2. Cálculo del total
-  const totalExercises = course.parts[0].exercises + course.parts[1].exercises + course.parts[2].exercises;
-
-  return ( // <--- Inicio del return DENTRO de la función App
+// Componente Course (Ejercicio 2.2)
+const Course = ({ course }) => {
+  return (
     <div>
-      {/* Componente Header: Pasamos el objeto 'course' completo */}
       <Header course={course} />
-
-      {/* Componente Content: Pasamos solo el array de 'parts' */}
       <Content parts={course.parts} />
-
-      {/* Componente Total */}
-      <Total total={totalExercises} />
+      <Total parts={course.parts} />
     </div>
   )
-} // <--- Final de la función App
+}
+
+
+const App = () => {
+  const courses = [
+    {
+      name: 'Half Stack application development',
+      id: 1,
+      parts: [
+        {
+          name: 'Fundamentals of React',
+          exercises: 10,
+          id: 1
+        },
+        {
+          name: 'Using props to pass data',
+          exercises: 7,
+          id: 2
+        },
+        {
+          name: 'State of a component',
+          exercises: 14,
+          id: 3
+        },
+        {
+          name: 'Redux',
+          exercises: 11,
+          id: 4
+        }
+      ]
+    },
+    {
+      name: 'Node.js',
+      id: 2,
+      parts: [
+        {
+          name: 'Routing',
+          exercises: 3,
+          id: 1
+        },
+        {
+          name: 'Middlewares',
+          exercises: 7,
+          id: 2
+        }
+      ]
+    }
+  ]
+
+  return (
+    <div>
+      {courses.map(course =>
+        <Course key={course.id} course={course} />
+      )}
+    </div>
+  )
+}
 
 export default App
